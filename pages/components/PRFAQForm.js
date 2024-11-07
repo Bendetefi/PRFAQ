@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -6,19 +5,21 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { 
-  Rocket, 
-  Mail, 
-  Sparkles,
-  Zap,
-  FlameKindling,
-  Target, 
-  Users, 
-  Building2, 
-  BarChart2,
-  MessageSquare,
-  AlertCircle
-} from 'lucide-react';
+import {
+  Box,
+  Card,
+  CardBody,
+  CardHeader,
+  Heading,
+  Text,
+  Input,
+  Button,
+  Textarea,
+  FormLabel,
+  Progress,
+  Alert,
+  AlertDescription,
+} from '@chakra-ui/react';
 
 const PRFAQForm = () => {
   const [step, setStep] = useState(1);
