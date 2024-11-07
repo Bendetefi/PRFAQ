@@ -1,10 +1,3 @@
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { Progress } from '@/components/ui/progress';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import React, { useState } from 'react';
 import {
   Box,
@@ -20,6 +13,12 @@ import {
   Progress,
   Alert,
   AlertDescription,
+  Grid,
+  GridItem,
+  Flex,
+  VStack,
+  HStack,
+  Spinner
 } from '@chakra-ui/react';
 import { 
   Rocket, 
@@ -114,32 +113,39 @@ const PRFAQForm = () => {
   };
   const renderInnovationLevel = () => {    
     return (
-      <div className="grid grid-cols-3 gap-4">
+      <Grid templateColumns="repeat(3, 1fr)" gap={4}>
         {innovationLevels.map((level) => (
-          <div 
+          <Box
             key={level.value}
-            className={`p-4 border rounded-lg cursor-pointer transition-all ${
+            p={4}
+            borderWidth="1px"
+            borderRadius="lg"
+            cursor="pointer"
+            transition="all 0.2s"
+            bg={formData.productInnovationLevel === level.value ? 'blue.50' : undefined}
+            borderColor={
               formData.productInnovationLevel === level.value 
-                ? 'border-primary bg-primary/10' 
+                ? 'blue.500'
                 : validationErrors.has('productInnovationLevel')
-                  ? 'border-red-500'
-                  : 'hover:border-primary'
-            }`}
+                  ? 'red.500'
+                  : 'gray.200'
+            }
+            _hover={{ borderColor: 'blue.500' }}
             onClick={() => handleInputChange('productInnovationLevel', level.value)}
           >
-            <div className="flex flex-col items-center text-center">
+            <VStack>
               {level.icon}
-              <div className="font-medium mt-2">{level.label}</div>
-            </div>
-          </div>
+              <Text fontWeight="medium">{level.label}</Text>
+            </VStack>
+          </Box>
         ))}
         {validationErrors.has('productInnovationLevel') && (
-          <p className="text-red-500 text-sm mt-1 flex items-center justify-center col-span-3">
-            <AlertCircle className="w-4 h-4 ml-1" />
+          <Text color="red.500" fontSize="sm" display="flex" alignItems="center" gridColumn="span 3">
+            <AlertCircle style={{ marginLeft: '0.25rem' }} />
             יש לבחור רמת חדשנות למוצר
-          </p>
+          </Text>
         )}
-      </div>
+      </Grid>
     );
   };
 
@@ -147,132 +153,135 @@ const PRFAQForm = () => {
     switch(step) {
       case 1:
         return (
-          <div className="space-y-4" dir="rtl">
+          <Box dir="rtl">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Rocket className="w-6 h-6" />
+              <Heading size="md" display="flex" alignItems="center" gap={2}>
+                <Rocket />
                 פרטי המוצר הבסיסיים
-              </CardTitle>
-              <CardDescription>
+              </Heading>
+              <Text color="gray.600">
                 הזן את הפרטים הבסיסיים של המוצר החדש
-              </CardDescription>
+              </Text>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
-                <div>
-                  <Label>תיאור קצר של המוצר *</Label>
+            <CardBody>
+              <VStack spacing={6}>
+                <Box width="100%">
+                  <FormLabel>תיאור קצר של המוצר *</FormLabel>
                   <Textarea
                     value={formData.productDescription}
                     onChange={(e) => handleInputChange('productDescription', e.target.value)}
                     placeholder="תאר בקצרה את המוצר החדש"
-                    className={validationErrors.has('productDescription') ? 'border-red-500 focus-visible:ring-red-500' : ''}
+                    borderColor={validationErrors.has('productDescription') ? 'red.500' : undefined}
                   />
                   {validationErrors.has('productDescription') && (
-                    <p className="text-red-500 text-sm mt-1 flex items-center">
-                      <AlertCircle className="w-4 h-4 ml-1" />
+                    <Text color="red.500" fontSize="sm" mt={1} display="flex" alignItems="center">
+                      <AlertCircle style={{ marginLeft: '0.25rem' }} />
                       שדה חובה - יש למלא תיאור מוצר
-                    </p>
+                    </Text>
                   )}
-                </div>
-                <div>
-                  <Label>רמת חדשנות המוצר *</Label>
+                </Box>
+                <Box width="100%">
+                  <FormLabel>רמת חדשנות המוצר *</FormLabel>
                   {renderInnovationLevel()}
-                </div>
-              </div>
-            </CardContent>
-          </div>
+                </Box>
+              </VStack>
+            </CardBody>
+          </Box>
         );
       
       case 2:
         return (
-          <div className="space-y-4" dir="rtl">
+          <Box dir="rtl">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Target className="w-6 h-6" />
+              <Heading size="md" display="flex" alignItems="center" gap={2}>
+                <Target />
                 בעיה ופתרון
-              </CardTitle>
-              <CardDescription>
+              </Heading>
+              <Text color="gray.600">
                 תאר את הבעיה העסקית והפתרון המוצע
-              </CardDescription>
+              </Text>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
-                <div>
-                  <Label>תיאור הבעיה העסקית *</Label>
+            <CardBody>
+              <VStack spacing={6}>
+                <Box width="100%">
+                  <FormLabel>תיאור הבעיה העסקית *</FormLabel>
                   <Textarea
                     value={formData.problemDescription}
                     onChange={(e) => handleInputChange('problemDescription', e.target.value)}
                     placeholder="מה הבעיה שהמוצר פותר?"
-                    className={validationErrors.has('problemDescription') ? 'border-red-500 focus-visible:ring-red-500' : ''}
+                    borderColor={validationErrors.has('problemDescription') ? 'red.500' : undefined}
                   />
                   {validationErrors.has('problemDescription') && (
-                    <p className="text-red-500 text-sm mt-1 flex items-center">
-                      <AlertCircle className="w-4 h-4 ml-1" />
+                    <Text color="red.500" fontSize="sm" mt={1} display="flex" alignItems="center">
+                      <AlertCircle style={{ marginLeft: '0.25rem' }} />
                       שדה חובה - יש למלא תיאור הבעיה
-                    </p>
+                    </Text>
                   )}
-                </div>
-                <div>
-                  <Label>הפתרון המוצע</Label>
+                </Box>
+                <Box width="100%">
+                  <FormLabel>הפתרון המוצע</FormLabel>
                   <Textarea
                     value={formData.solution}
                     onChange={(e) => handleInputChange('solution', e.target.value)}
                     placeholder="כיצד המוצר פותר את הבעיה?"
                   />
-                </div>
-                <div>
-                  <Label>קהל היעד</Label>
+                </Box>
+                <Box width="100%">
+                  <FormLabel>קהל היעד</FormLabel>
                   <Textarea
                     value={formData.targetAudience}
                     onChange={(e) => handleInputChange('targetAudience', e.target.value)}
                     placeholder="מיהו קהל היעד של המוצר?"
                   />
-                </div>
-              </div>
-            </CardContent>
-          </div>
+                </Box>
+              </VStack>
+            </CardBody>
+          </Box>
         );
 case 3:
         return (
-          <div className="space-y-4" dir="rtl">
+          <Box dir="rtl">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <BarChart2 className="w-6 h-6" />
+              <Heading size="md" display="flex" alignItems="center" gap={2}>
+                <BarChart2 />
                 מדדים ונתונים
-              </CardTitle>
-              <CardDescription>
+              </Heading>
+              <Text color="gray.600">
                 הגדר את המדדים העסקיים של המוצר
-              </CardDescription>
+              </Text>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
-                <div>
-                  <Label>מדדים נוכחיים</Label>
+            <CardBody>
+              <VStack spacing={6}>
+                <Box width="100%">
+                  <FormLabel>מדדים נוכחיים</FormLabel>
                   <Textarea
                     value={formData.currentMetrics}
                     onChange={(e) => handleInputChange('currentMetrics', e.target.value)}
                     placeholder="מהם המדדים הנוכחיים?"
                   />
-                </div>
-                <div>
-                  <Label>מדדים עתידיים צפויים</Label>
+                </Box>
+                <Box width="100%">
+                  <FormLabel>מדדים עתידיים צפויים</FormLabel>
                   <Textarea
                     value={formData.futureMetrics}
                     onChange={(e) => handleInputChange('futureMetrics', e.target.value)}
                     placeholder="מהם המדדים הצפויים לאחר השקת המוצר?"
                   />
-                </div>
-                <div>
-                  <Label>KPIs מרכזיים</Label>
-                  <div className="grid grid-cols-2 gap-4 mt-2">
+                </Box>
+                <Box width="100%">
+                  <FormLabel>KPIs מרכזיים</FormLabel>
+                  <Grid templateColumns="repeat(2, 1fr)" gap={4} mt={2}>
                     {kpiExamples.map(kpi => (
-                      <div 
+                      <Box
                         key={kpi.id}
-                        className={`p-4 border rounded-lg cursor-pointer transition-all ${
-                          formData.selectedKPIs.includes(kpi.id)
-                            ? 'border-primary bg-primary/10'
-                            : 'hover:border-primary'
-                        }`}
+                        p={4}
+                        borderWidth="1px"
+                        borderRadius="lg"
+                        cursor="pointer"
+                        transition="all 0.2s"
+                        bg={formData.selectedKPIs.includes(kpi.id) ? 'blue.50' : undefined}
+                        borderColor={formData.selectedKPIs.includes(kpi.id) ? 'blue.500' : 'gray.200'}
+                        _hover={{ borderColor: 'blue.500' }}
                         onClick={() => {
                           const updatedKPIs = formData.selectedKPIs.includes(kpi.id)
                             ? formData.selectedKPIs.filter(id => id !== kpi.id)
@@ -280,69 +289,69 @@ case 3:
                           handleInputChange('selectedKPIs', updatedKPIs);
                         }}
                       >
-                        <div className="font-medium">{kpi.label}</div>
-                        <div className="text-sm text-gray-500">{kpi.description}</div>
-                      </div>
+                        <Text fontWeight="medium">{kpi.label}</Text>
+                        <Text fontSize="sm" color="gray.600">{kpi.description}</Text>
+                      </Box>
                     ))}
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </div>
+                  </Grid>
+                </Box>
+              </VStack>
+            </CardBody>
+          </Box>
         );
 
       case 4:
         return (
-          <div className="space-y-4" dir="rtl">
+          <Box dir="rtl">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <MessageSquare className="w-6 h-6" />
+              <Heading size="md" display="flex" alignItems="center" gap={2}>
+                <MessageSquare />
                 מידע נוסף ופרטי התקשרות
-              </CardTitle>
-              <CardDescription>
+              </Heading>
+              <Text color="gray.600">
                 הוסף מידע משלים ופרטי התקשרות
-              </CardDescription>
+              </Text>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
-                <div>
-                  <Label>מידע נוסף שיעזור לדייק את ה-PRFAQ</Label>
+            <CardBody>
+              <VStack spacing={6}>
+                <Box width="100%">
+                  <FormLabel>מידע נוסף שיעזור לדייק את ה-PRFAQ</FormLabel>
                   <Textarea
                     value={formData.additionalInfo}
                     onChange={(e) => handleInputChange('additionalInfo', e.target.value)}
                     placeholder="הוסף מידע נוסף שיכול לעזור ביצירת PRFAQ מדויק יותר"
-                    className="h-32"
+                    minHeight="32"
                   />
-                </div>
-                <div>
-                  <Label>כתובת מייל *</Label>
+                </Box>
+                <Box width="100%">
+                  <FormLabel>כתובת מייל *</FormLabel>
                   <Input
                     type="email"
                     value={formData.userEmail}
                     onChange={(e) => handleInputChange('userEmail', e.target.value)}
                     placeholder="הזן את כתובת המייל שלך"
-                    className={validationErrors.has('userEmail') ? 'border-red-500 focus-visible:ring-red-500' : ''}
+                    borderColor={validationErrors.has('userEmail') ? 'red.500' : undefined}
                   />
                   {validationErrors.has('userEmail') && (
-                    <p className="text-red-500 text-sm mt-1 flex items-center">
-                      <AlertCircle className="w-4 h-4 ml-1" />
+                    <Text color="red.500" fontSize="sm" mt={1} display="flex" alignItems="center">
+                      <AlertCircle style={{ marginLeft: '0.25rem' }} />
                       שדה חובה - יש להזין כתובת מייל
-                    </p>
+                    </Text>
                   )}
-                </div>
+                </Box>
                 {formData.productInnovationLevel >= 2 && (
-                  <div>
-                    <Label>פרטי איש קשר עסקי</Label>
+                  <Box width="100%">
+                    <FormLabel>פרטי איש קשר עסקי</FormLabel>
                     <Input
                       value={formData.businessContact}
                       onChange={(e) => handleInputChange('businessContact', e.target.value)}
                       placeholder="שם ותפקיד של איש הקשר העסקי"
                     />
-                  </div>
+                  </Box>
                 )}
-              </div>
-            </CardContent>
-          </div>
+              </VStack>
+            </CardBody>
+          </Box>
         );
     }
   };
@@ -350,25 +359,25 @@ case 3:
   const progressPercentage = (step / totalSteps) * 100;
 
   return (
-    <div className="max-w-4xl mx-auto p-4">
+    <Box maxWidth="4xl" mx="auto" p={4}>
       <Card>
-        <div className="p-6">
-          <Progress value={progressPercentage} className="mb-6" />
+        <Box p={6}>
+          <Progress value={progressPercentage} mb={6} />
           {renderStep()}
-          <div className="flex justify-between mt-6" dir="rtl">
+          <Flex justifyContent="space-between" mt={6} dir="rtl">
             {step > 1 && (
               <Button onClick={handleBack} variant="outline">
                 חזור
               </Button>
             )}
-            <div className="flex-1" />
+            <Box flex="1" />
             {step < totalSteps ? (
-              <Button onClick={handleNext}>
+              <Button onClick={handleNext} colorScheme="blue">
                 המשך
               </Button>
             ) : (
-              <Button 
-                disabled={isLoading}
+              <Button
+                isDisabled={isLoading}
                 onClick={async () => {
                   if (!validateStep()) return;
                   setIsLoading(true);
@@ -382,27 +391,25 @@ case 3:
                     setIsLoading(false);
                   }
                 }}
+                colorScheme="blue"
               >
                 {isLoading ? (
-                  <div className="flex items-center">
-                    <svg className="animate-spin h-4 w-4 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    יוצר מסמכים...
-                  </div>
+                  <HStack>
+                    <Spinner size="sm" />
+                    <Text>יוצר מסמכים...</Text>
+                  </HStack>
                 ) : (
-                  <>
-                    <Mail className="w-4 h-4 ml-2" />
-                    שלח ויצר PRFAQ
-                  </>
+                  <HStack>
+                    <Mail />
+                    <Text>שלח ויצר PRFAQ</Text>
+                  </HStack>
                 )}
               </Button>
             )}
-          </div>
-        </div>
+          </Flex>
+        </Box>
       </Card>
-    </div>
+    </Box>
   );
 };
 
