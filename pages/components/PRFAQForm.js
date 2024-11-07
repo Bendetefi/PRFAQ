@@ -5,6 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import React, { useState } from 'react';
 import {
   Box,
   Card,
@@ -20,6 +21,19 @@ import {
   Alert,
   AlertDescription,
 } from '@chakra-ui/react';
+import { 
+  Rocket, 
+  Mail, 
+  Sparkles,
+  Zap,
+  FlameKindling,
+  Target, 
+  Users, 
+  Building2, 
+  BarChart2,
+  MessageSquare,
+  AlertCircle
+} from 'lucide-react';
 
 const PRFAQForm = () => {
   const [step, setStep] = useState(1);
